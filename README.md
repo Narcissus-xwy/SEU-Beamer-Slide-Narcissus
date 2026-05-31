@@ -96,7 +96,49 @@ SEU-Beamer-Slide-Narcissus/
 
 ---
 
-## 三、编译原理：从代码到 PDF
+## 三、编译方式
+
+写好 `.tex` 文件后，有三种方式编译成 PDF：
+
+### 方式一：Windows 双击 `make.bat`（推荐）
+
+直接双击 `make.bat`，会出现命令行窗口询问：
+
+```
+========================================
+  SEU-Beamer-Slide-Narcissus 编译工具
+========================================
+
+可以直接拖拽 .tex 文件到本窗口，或手动输入文件名
+
+请输入 .tex 文件路径：mytalk
+```
+
+- 输入文件名（不含 `.tex` 后缀）后回车
+- 或直接把 `.tex` 文件**拖拽到窗口**自动填充路径
+- 或直接回车，默认编译 `example_clean.tex`
+
+脚本会自动执行两次 `xelatex` 并清理临时文件。
+
+### 方式二：macOS / Linux 终端
+
+```bash
+bash make.sh            # 默认编译 example_clean.tex
+# 或编辑 make.sh，把 example_clean 改成你的文件名
+```
+
+### 方式三：手动编译（所有平台）
+
+```bash
+xelatex mytalk.tex      # 第一次编译（生成辅助文件）
+xelatex mytalk.tex      # 第二次编译（生成正确的目录和页码）
+```
+
+> **必须编译两次**，否则目录、页码、交叉引用可能不正确。
+
+---
+
+## 四、编译原理：从代码到 PDF
 
 ```
 步骤1：你写 .tex 文件
@@ -186,8 +228,8 @@ SEU-Beamer-Slide-Narcissus/
 \end{document}
 
 % 3. 编译（二选一）：
-%    一键脚本：修改 make.bat 中的文件名，双击运行
-%    手动编译：xelatex mytalk.tex 再执行一次
+%    双击 make.bat，输入 mytalk（或拖拽文件）→ 自动编译两次
+%    或手动：xelatex mytalk.tex 再执行一次
 ```
 
 ### 常用元素速查
