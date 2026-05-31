@@ -73,6 +73,9 @@ SEU-Beamer-Slide-Narcissus/
 ├── Makefile                  Linux/macOS 编译脚本
 ├── make.bat                  Windows 编译脚本（双击运行）
 ├── make.sh                   Shell 编译脚本（bash make.sh）
+├── pdf2ppt.bat               Windows PDF → PPTX 转换（双击运行）
+├── pdf2ppt.py                PDF → PPTX 转换脚本
+├── requirements.txt          Python 依赖（pymupdf, python-pptx）
 │
 ├── .gitignore                Git 忽略规则（不跟踪 .aux .log 等临时文件）
 ├── LICENSE                   GPL-3.0 开源协议
@@ -126,6 +129,32 @@ SEU-Beamer-Slide-Narcissus/
 bash make.sh            # 默认编译 example_clean.tex
 # 或编辑 make.sh，把 example_clean 改成你的文件名
 ```
+
+---
+
+### 方式四：PDF → PPTX 转换（可选）
+
+如果你需要把生成的 PDF 幻灯片转成 PowerPoint (.pptx) 格式，可以用配套的 `pdf2ppt` 工具：
+
+1. **安装依赖**（只需一次）：
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **转换**：双击 `pdf2ppt.bat`，把 PDF 文件拖拽到窗口 → 回车
+
+   ```
+   ========================================
+     SEU-Beamer-Slide-Narcissus
+     PDF → PPTX 转换工具
+   ========================================
+
+   可以直接拖拽 .pdf 文件到本窗口，或手动输入路径
+
+   请输入 .pdf 文件路径：BiOmics_SEU_optimized.pdf
+   ```
+
+   输出：同目录下的 `.pptx` 文件（16:9 宽屏，每页 PDF 渲染为一页幻灯片）。
 
 ### 方式三：手动编译（所有平台）
 
