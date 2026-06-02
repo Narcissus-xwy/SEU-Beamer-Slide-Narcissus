@@ -1,4 +1,4 @@
-"""PDF to PPTX converter for SEU-Beamer-Slide-Narcissus.
+"""PDF to PPTX converter for SEUPPT-Narcissus.
 
 Usage:
     python pdf2ppt.py <path-to-pdf> [--dpi 300]

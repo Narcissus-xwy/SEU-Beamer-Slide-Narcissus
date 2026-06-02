@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SEU-Beamer-Slide-Narcissus 编译脚本 (Linux/macOS)
+# SEUPPT-Narcissus 编译脚本 (Linux/macOS)
 #
 # 依赖：tectonic（替代 xelatex）
 #   安装：https://tectonic-typesetting.github.io/book/latest/installation/

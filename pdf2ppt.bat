@@ -1,9 +1,9 @@
 @echo off
-title SEU-Beamer-Slide-Narcissus PDF 转 PPTX
+title SEUPPT-Narcissus PDF 转 PPTX
 chcp 65001 >nul
 
 echo ========================================
-echo   SEU-Beamer-Slide-Narcissus
+echo   SEUPPT-Narcissus
 echo   PDF 转 PPTX (1200 DPI)
 echo ========================================
 echo.

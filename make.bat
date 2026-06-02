@@ -1,9 +1,9 @@
 @echo off
-title SEU-Beamer-Slide-Narcissus 编译工具
+title SEUPPT-Narcissus 编译工具
 chcp 65001 >nul
 
 echo ========================================
-echo   SEU-Beamer-Slide-Narcissus 编译工具
+echo   SEUPPT-Narcissus 编译工具
 echo ========================================
 echo.
 echo 你可以直接拖拽 .tex 文件到本窗口，或手动输入文件名

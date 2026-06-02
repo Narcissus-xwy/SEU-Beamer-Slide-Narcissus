@@ -1,4 +1,4 @@
-# SEU-Beamer-Slide-Narcissus
+# SEUPPT-Narcissus
 
 东南大学 Beamer 幻灯片模板 — **简洁优化版**
 
@@ -31,8 +31,8 @@
 
 ```bash
 # 1. 克隆
-git clone https://github.com/Narcissus-xwy/SEU-Beamer-Slide-Narcissus.git
-cd SEU-Beamer-Slide-Narcissus
+git clone https://github.com/Narcissus-xwy/SEUPPT-Narcissus.git
+cd SEUPPT-Narcissus
 
 # 2. 安装依赖（根据你的平台）
 bash install.sh          # Linux / macOS
@@ -73,7 +73,7 @@ bash make.sh             # Linux / macOS
 ## 二、文件结构详解
 
 ```
-SEU-Beamer-Slide-Narcissus/
+SEUPPT-Narcissus/
 │
 ├── seu_clean.sty           ★ 核心样式文件（最重要）
 │                             定义整套幻灯片的视觉风格：
@@ -135,7 +135,7 @@ SEU-Beamer-Slide-Narcissus/
 
 ```
 ========================================
-  SEU-Beamer-Slide-Narcissus 编译工具
+  SEUPPT-Narcissus 编译工具
 ========================================
 
 请输入 .tex 文件路径：mytalk
