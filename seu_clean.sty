@@ -3,8 +3,20 @@
 %%% CJK font configuration for Chinese support
 %%%
 \RequirePackage{xeCJK}
-\setCJKsansfont{Microsoft YaHei}
-\setCJKmainfont{Microsoft YaHei}
+
+% Auto-detect CJK fonts: WenYuan (Linux) > Microsoft YaHei (Windows) > Noto CJK (fallback)
+\IfFontExistsTF{WenYuan Sans SC}{
+  \setCJKsansfont{WenYuan Sans SC}[AutoFakeSlant]
+  \setCJKmainfont{WenYuan Serif SC}[AutoFakeSlant]
+}{
+  \IfFontExistsTF{Microsoft YaHei}{
+    \setCJKsansfont{Microsoft YaHei}
+    \setCJKmainfont{Microsoft YaHei}
+  }{
+    \setCJKsansfont{Noto Sans CJK SC}[AutoFakeSlant]
+    \setCJKmainfont{Noto Serif CJK SC}[AutoFakeSlant]
+  }
+}
 
 %%%
 %%% Inherit definitions from existing themes (DO NOT MODIFY THESE)
