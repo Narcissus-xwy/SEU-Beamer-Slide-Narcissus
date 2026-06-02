@@ -17,7 +17,7 @@
 \usecolortheme{whale}
 
 % Layout scheme for inner elements: rounded elements
-\useinnertheme[shadow]{rounded}
+\useinnertheme{rounded}
 
 % Color scheme for inner elements: use foreground colors
 \usecolortheme{orchid}
@@ -85,6 +85,14 @@
   \pgfdeclareverticalshading{beamer@topshade}{\paperwidth}{%
     color(0pt)=(bg);
     color(4pt)=(bg)}
+    
+  %%% Block color customizations: lighter, softer palette
+  \setbeamercolor{block title}{fg=white, bg=structure.fg!65!white}
+  \setbeamercolor{block body}{fg=black, bg=structure.fg!3!white}
+  \setbeamercolor{block title alerted}{fg=white, bg=red!55!white}
+  \setbeamercolor{block body alerted}{fg=black, bg=red!3!white}
+  \setbeamercolor{block title example}{fg=white, bg=structure.fg!65!white}
+  \setbeamercolor{block body example}{fg=black, bg=structure.fg!3!white}
 }
 
 % Top & bottom colors: unified SEU green
