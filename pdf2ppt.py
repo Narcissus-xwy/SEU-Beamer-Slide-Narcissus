@@ -3,6 +3,10 @@
 Usage:
     python pdf2ppt.py <path-to-pdf> [--dpi 300]
 
+The script automatically searches for the PDF in:
+1. The given path as-is
+2. The out/ directory next to this script (project root)
+
 Or called from pdf2ppt.bat (double-click).
 """
 import sys
@@ -19,17 +23,40 @@ import io
 PDF_BASE_DPI = 72
 
 
-def pdf_to_pptx(pdf_path: str, dpi: int = 300) -> str:
-    pdf_path = Path(pdf_path)
-    if not pdf_path.exists():
-        raise FileNotFoundError(f"文件不存在: {pdf_path}")
+def resolve_pdf_path(pdf_arg: str) -> Path:
+    """Resolve PDF path, searching in project out/ if not found directly."""
+    # Strip quotes
+    pdf_arg = pdf_arg.strip('"\'')
 
-    if pdf_path.suffix.lower() != ".pdf":
-        pdf_path = pdf_path.with_suffix(".pdf")
-        if not pdf_path.exists():
-            raise FileNotFoundError(f"文件不存在: {pdf_path}")
+    if not pdf_arg:
+        raise FileNotFoundError("输入的路径为空")
+
+    # Try as-is
+    path = Path(pdf_arg)
+    if path.suffix.lower() != ".pdf":
+        path = path.with_suffix(".pdf")
+    if path.exists():
+        return path
+
+    # Try in out/ directory (project root)
+    script_dir = Path(__file__).resolve().parent
+    out_path = script_dir / "out" / path.name
+    if out_path.exists():
+        print(f"在 out/ 目录找到文件: {out_path}")
+        return out_path
+
+    raise FileNotFoundError(
+        f"文件不存在（已尝试: {path} 及 out/{path.name}）"
+    )
+
+
+def pdf_to_pptx(pdf_path: str, dpi: int = 1200) -> str:
+    pdf_path = resolve_pdf_path(pdf_path)
 
     out_path = pdf_path.with_suffix(".pptx")
+    # 确保输出文件名合理，不会产生意外文件
+    if not out_path.name or out_path.name.startswith("."):
+        raise ValueError(f"输出路径不合理: {out_path}")
     zoom = dpi / PDF_BASE_DPI
 
     doc = fitz.open(str(pdf_path))
@@ -64,13 +91,12 @@ def pdf_to_pptx(pdf_path: str, dpi: int = 300) -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PDF 转 PPTX 工具")
     parser.add_argument("pdf", help="PDF 文件路径")
-    parser.add_argument("--dpi", type=int, default=300,
-                        help="渲染分辨率（默认 300 DPI，论文级质量）")
+    parser.add_argument("--dpi", type=int, default=1200,
+                        help="渲染分辨率（默认 1200 DPI）")
     args = parser.parse_args()
 
-    pdf_arg = args.pdf.strip('"')
     try:
-        result = pdf_to_pptx(pdf_arg, dpi=args.dpi)
+        result = pdf_to_pptx(args.pdf, dpi=args.dpi)
         size_kb = os.path.getsize(result) / 1024
         print(f"\n转换完成！")
         print(f"DPI:     {args.dpi}")
