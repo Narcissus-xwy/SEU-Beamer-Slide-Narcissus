@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title SEUPPT-Narcissus 安装脚本
+title SEU-Beamer-Slide-Narcissus 安装脚本
 
 echo ========================================
-echo   SEUPPT-Narcissus 安装脚本
+echo   SEU-Beamer-Slide-Narcissus 安装脚本
 echo   Windows
 echo ========================================
 echo.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SEUPPT-Narcissus 一键安装脚本 (Linux/macOS)
+# SEU-Beamer-Slide-Narcissus 一键安装脚本 (Linux/macOS)
 #
 # 自动完成：
 #   1. 安装 Tectonic（LaTeX 编译器）
@@ -12,7 +12,7 @@
 set -e
 
 echo "========================================"
-echo "  SEUPPT-Narcissus 安装脚本"
+echo "  SEU-Beamer-Slide-Narcissus 安装脚本"
 echo "  Linux / macOS"
 echo "========================================"
 echo ""
@@ -168,7 +168,7 @@ echo "========================================"
 echo "  安装完成！"
 echo ""
 echo "  使用方法："
-echo "    cd SEUPPT-Narcissus"
+echo "    cd SEU-Beamer-Slide-Narcissus"
 echo "    bash make.sh              # 编译 example_clean"
 echo "    bash make.sh mytalk       # 编译自定义文件"
 echo "========================================"
