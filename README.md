@@ -14,13 +14,36 @@
 
 ## 目录
 
+- [零、快速开始](#零快速开始)
 - [一、这个模板是什么？](#一这个模板是什么)
 - [二、文件结构详解](#二文件结构详解)
-- [三、编译原理：从代码到 PDF](#三编译原理从代码到-pdf)
-- [四、快速上手：从零写第一份幻灯片](#四快速上手从零写第一份幻灯片)
-- [五、插图指南](#五插图指南)
-- [六、FAQ 常见问题](#六faq-常见问题)
+- [三、编译方式](#三编译方式)
+- [四、编译原理：从代码到 PDF](#四编译原理从代码到-pdf)
+- [五、安装指南](#五安装指南)
+- [六、快速上手：从零写第一份幻灯片(#六快速上手从零写第一份幻灯片)
+- [七、插图指南](#七插图指南)
+- [八、FAQ 常见问题](#八faq-常见问题)
 - [许可证](#许可证)
+
+---
+
+## 零、快速开始
+
+```bash
+# 1. 克隆
+git clone https://github.com/Narcissus-xwy/SEU-Beamer-Slide-Narcissus.git
+cd SEU-Beamer-Slide-Narcissus
+
+# 2. 安装依赖（根据你的平台）
+bash install.sh          # Linux / macOS
+# 或双击 install.bat    # Windows
+
+# 3. 编译 PDF
+bash make.sh             # Linux / macOS
+# 或双击 make.bat        # Windows
+
+# 4. 打开 out/example_clean.pdf 查看效果
+```
 
 ---
 
@@ -70,13 +93,16 @@ SEU-Beamer-Slide-Narcissus/
 │                             展示所有常用元素怎么写：标题页、目录、
 │                             列表、分栏、表格、公式、区块……
 │
-├── Makefile                  Linux/macOS 编译脚本
+├── install.sh                Linux/macOS 一键安装脚本
+├── install.bat               Windows 一键安装脚本
+├── make.sh                   Linux/macOS 编译脚本
 ├── make.bat                  Windows 编译脚本（双击运行）
-├── make.sh                   Shell 编译脚本（bash make.sh）
+├── Makefile                  通用 make 编译
+├── pdf2ppt.py                PDF → PPTX 转换工具
 ├── pdf2ppt.bat               Windows PDF → PPTX 转换（双击运行）
-├── pdf2ppt.py                PDF → PPTX 转换脚本
 ├── requirements.txt          Python 依赖（pymupdf, python-pptx）
 │
+├── out/                      编译输出目录
 ├── .gitignore                Git 忽略规则（不跟踪 .aux .log 等临时文件）
 ├── LICENSE                   GPL-3.0 开源协议
 └── README.md                 本文件
@@ -101,69 +127,38 @@ SEU-Beamer-Slide-Narcissus/
 
 ## 三、编译方式
 
-写好 `.tex` 文件后，有三种方式编译成 PDF：
+写好 `.tex` 文件后，根据你的平台选择编译方式。
 
-### 方式一：Windows 双击 `make.bat`（推荐）
+### Windows
 
-直接双击 `make.bat`，会出现命令行窗口询问：
+双击 `make.bat`，输入文件名后回车（或直接把 `.tex` 文件拖拽到窗口）。
 
 ```
 ========================================
   SEU-Beamer-Slide-Narcissus 编译工具
 ========================================
 
-可以直接拖拽 .tex 文件到本窗口，或手动输入文件名
-
 请输入 .tex 文件路径：mytalk
 ```
 
-- 输入文件名（不含 `.tex` 后缀）后回车
-- 或直接把 `.tex` 文件**拖拽到窗口**自动填充路径
-- 或直接回车，默认编译 `example_clean.tex`
+脚本自动执行两次 `xelatex`，输出在 `out/` 目录。
 
-脚本会自动执行两次 `xelatex` 并清理临时文件。
-
-### 方式二：macOS / Linux 终端
+### Linux / macOS
 
 ```bash
-bash make.sh            # 默认编译 example_clean.tex
-# 或编辑 make.sh，把 example_clean 改成你的文件名
+bash make.sh                    # 编译 example_clean
+bash make.sh mytalk             # 编译 mytalk.tex
+bash make.sh /path/to/mytalk    # 编译外部 .tex（PDF 写回原目录）
 ```
 
----
-
-### 方式四：PDF → PPTX 转换（可选）
-
-如果你需要把生成的 PDF 幻灯片转成 PowerPoint (.pptx) 格式，可以用配套的 `pdf2ppt` 工具：
-
-1. **安装依赖**（只需一次）：
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **转换**：双击 `pdf2ppt.bat`，把 PDF 文件拖拽到窗口 → 回车
-
-   ```
-   ========================================
-     SEU-Beamer-Slide-Narcissus
-     PDF → PPTX 转换工具
-   ========================================
-
-   可以直接拖拽 .pdf 文件到本窗口，或手动输入路径
-
-   请输入 .pdf 文件路径：BiOmics_SEU_optimized.pdf
-   ```
-
-   输出：同目录下的 `.pptx` 文件（16:9 宽屏，每页 PDF 渲染为一页幻灯片）。
-
-### 方式三：手动编译（所有平台）
+### PDF → PPTX 转换（可选）
 
 ```bash
-xelatex mytalk.tex      # 第一次编译（生成辅助文件）
-xelatex mytalk.tex      # 第二次编译（生成正确的目录和页码）
+pip install -r requirements.txt   # 只需一次
+python pdf2ppt.py mytalk.pdf      # 转换
 ```
 
-> **必须编译两次**，否则目录、页码、交叉引用可能不正确。
+Windows 也可以双击 `pdf2ppt.bat`，拖拽 PDF 到窗口。
 
 ---
 
@@ -177,7 +172,8 @@ xelatex mytalk.tex      # 第二次编译（生成正确的目录和页码）
    \begin{document} ... \end{document}
 
 步骤2：在终端运行
-   xelatex myfile.tex
+   xelatex myfile.tex      # Windows
+   tectonic myfile.tex      # Linux / macOS
    ─ 编译器读取 .tex
    ─ 遇到 \usepackage{seu_clean} → 读取 seu_clean.sty
    ─ 遇到 \includegraphics → 读取 png 图片
@@ -198,7 +194,30 @@ xelatex mytalk.tex      # 第二次编译（生成正确的目录和页码）
 
 ---
 
-## 四、快速上手：从零写第一份幻灯片
+## 五、安装指南
+
+### Linux / macOS
+
+```bash
+bash install.sh
+```
+
+自动完成：
+1. 安装 **Tectonic**（轻量 LaTeX 编译器，~30MB 静态二进制）
+2. 下载并安装 **文源字体**（WenYuan Sans/Serif SC，支持斜体）
+3. 安装 **Python 依赖**（pymupdf + python-pptx）
+
+### Windows
+
+双击 `install.bat`，脚本会：
+1. 检查 `xelatex` 是否已安装（如未安装，提示下载 TeX Live / MiKTeX）
+2. 安装 Python 依赖（`pip install -r requirements.txt`）
+
+> 文源字体适用于 Linux，Windows 使用系统自带的 **Microsoft YaHei**，无需额外安装。
+
+---
+
+## 六、快速上手：从零写第一份幻灯片
 
 ```latex
 % 1. 新建一个 .tex 文件（比如 mytalk.tex）
@@ -304,99 +323,23 @@ xelatex mytalk.tex      # 第二次编译（生成正确的目录和页码）
 
 ---
 
-## 五、插图指南
+## 七、插图指南
 
-### 5.1 把图片放进 `figures/` 文件夹
+### 7.1 把图片放进 `figures/` 文件夹
 
-```
-SEU-Beamer-Slide-Narcissus/
-├── figures/                   ← 放这里
-│   ├── my_diagram.png         ← 你的图片
-│   ├── result_plot.pdf        ← 也可以放 PDF（矢量图，最推荐）
-│   └── photo.jpg
-├── seu_clean.sty
-...
-```
+### 7.2 在 .tex 里插入图片
 
-### 5.2 在 .tex 里插入图片
+### 7.3 控制图片大小的参数
 
-```latex
-% 最简单的方式（不编号）：
-\begin{frame}{实验结果}
-  \centering
-  \includegraphics[width=0.8\textwidth]{my_diagram.png}
-\end{frame}
+### 7.4 双栏图文混排
 
-% 带标题编号的方式：
-\begin{frame}{实验结果}
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{my_diagram.png}
-    \caption{模型的整体架构图}
-    \label{fig:architecture}
-  \end{figure}
-\end{frame}
-```
+### 7.5 多张图并排
 
-### 5.3 控制图片大小的参数
-
-| 写法 | 效果 |
-|---|---|
-| `width=0.8\textwidth` | 宽度占页面的 80%（**最常用**） |
-| `width=5cm` | 固定 5 厘米宽 |
-| `scale=0.5` | 缩小到 50% |
-| `width=\textwidth, height=0.7\textheight, keepaspectratio` | 尽量铺满，保持比例不拉伸（**推荐**） |
-
-### 5.4 双栏图文混排
-
-```latex
-\begin{frame}{方法对比}
-\begin{columns}
-\column{0.48\textwidth}
-\begin{itemize}
-  \item 方法A：准确率 95\%
-  \item 方法B：准确率 87\%
-  \item BiOmics：准确率 98\%
-\end{itemize}
-
-\column{0.48\textwidth}
-\centering
-\includegraphics[width=\textwidth]{benchmark_chart.png}
-\end{columns}
-\end{frame}
-```
-
-### 5.5 多张图并排
-
-```latex
-\begin{frame}{并排对比}
-\begin{columns}
-\column{0.3\textwidth}
-\includegraphics[width=\textwidth]{before.png}
-
-\column{0.3\textwidth}
-\includegraphics[width=\textwidth]{after.png}
-
-\column{0.3\textwidth}
-\includegraphics[width=\textwidth]{comparison.png}
-\end{columns}
-\end{frame}
-```
-
-### 5.6 图片格式建议
-
-| 格式 | 适用场景 | 推荐度 |
-|---|---|---|
-| **PDF** | 图表、示意图（矢量，放大不模糊） | ★★★★★ |
-| **PNG** | 截图、带透明背景的图 | ★★★★☆ |
-| **JPG** | 照片 | ★★★☆☆ |
-
-> **不要**用 JPG 存图表和文字截图，会有压缩失真。
-> **不要**不写 `width=`，原图尺寸很可能超出页面。
+### 7.6 图片格式建议
 
 ---
 
-## 六、FAQ 常见问题
+## 八、FAQ 常见问题
 
 **Q: 编译报错 "File not found"？**
 A: 检查图片路径。如果用 `\graphicspath{{figures/}}`，直接写文件名 `{my_diagram.png}`；如果没设路径，要写相对路径 `{figures/my_diagram.png}`。
