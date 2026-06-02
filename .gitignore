@@ -182,5 +182,8 @@ TSWLatexianTemp*
 # MacOS .DS_Store Files
 *.DS_Store
 
+## Build outputs:
+out/
+
 ## PowerPoint temp files:
 ~$*
