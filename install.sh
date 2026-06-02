@@ -95,7 +95,7 @@ install_fonts() {
     echo "      字体版本: ${FONT_VERSION}"
 
     mkdir -p ~/.fonts
-    cd /tmp
+    pushd /tmp >/dev/null
 
     # 下载黑体
     if [ ! -f WenYuanSansSC-OTF.7z ]; then
@@ -141,6 +141,8 @@ install_fonts() {
     echo "      刷新字体缓存 ..."
     fc-cache -fv 2>&1 | tail -1
 
+    popd >/dev/null
+
     # 验证
     echo "      验证字体 ..."
     fc-match "WenYuan Sans SC"
@@ -153,7 +155,7 @@ install_python() {
     echo ""
     echo "[3/3] 正在安装 Python 依赖 ..."
 
-    cd "$(dirname "$0")"
+    cd "$PROJECT_DIR"
 
     if [ ! -f requirements.txt ]; then
         echo "[!] requirements.txt 不存在，跳过"
@@ -168,6 +170,8 @@ install_python() {
 }
 
 # ─── 执行 ────────────────────────────────────────────────────
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 install_tectonic
 install_fonts
 install_python
