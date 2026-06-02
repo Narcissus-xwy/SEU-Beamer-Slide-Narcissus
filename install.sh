@@ -111,17 +111,26 @@ install_fonts() {
             "https://github.com/takushun-wu/WenYuanFonts/releases/download/${FONT_VERSION}/WenYuanSerifSC-OTF.7z"
     fi
 
-    # 解压（优先用 Python py7zr，其次 7z）
+    # 解压（自动安装 py7zr，备选 7z）
     extract_7z() {
         local archive="$1"
+        # 尝试用 Python py7zr
         if python3 -c "import py7zr; py7zr.SevenZipFile('${archive}').extractall('${HOME}/.fonts/')" 2>/dev/null; then
             return 0
         fi
+        # 安装 py7zr 再试
+        echo "      安装 py7zr 用于解压字体 ..."
+        pip3 install py7zr -q 2>/dev/null || pip install py7zr -q 2>/dev/null
+        if python3 -c "import py7zr; py7zr.SevenZipFile('${archive}').extractall('${HOME}/.fonts/')" 2>/dev/null; then
+            return 0
+        fi
+        # 备选：系统 7z
         if command -v 7z &>/dev/null; then
             7z x "${archive}" -o"${HOME}/.fonts/" -y >/dev/null
             return 0
         fi
-        echo "[!] 无法解压 ${archive}，请手动安装 p7zip 或 py7zr"
+        echo "[!] 解压失败: ${archive}"
+        echo "    请手动安装: pip install py7zr"
         return 1
     }
 
