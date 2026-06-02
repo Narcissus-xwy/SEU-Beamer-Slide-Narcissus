@@ -5,7 +5,7 @@
 基于 [SEU-Beamer-Slide](https://github.com/Narcissus-xwy/SEU-Beamer-Slide) 优化而来，主要改进：
 
 - **正文页纯白背景**，仅标题页保留 SEU 水印，更适合学术报告投影
-- **内置 CJK 中文支持**（Microsoft YaHei），开箱即用
+- **跨平台 CJK 中文支持**：Linux 自动检测文源字体 (WenYuan)，Windows 自动使用微软雅黑 (YaHei)
 - **黑色版 Logo** 适配白底风格
 - **统一浅绿色配色**，顶边底边色调一致
 - **缩小顶边字号**，节省垂直空间
@@ -60,7 +60,9 @@ bash make.sh             # Linux / macOS
 整个系统的上下游关系：
 
 ```
-你写 .tex 文件  ──→  xelatex 编译器  ──→  输出 .pdf 幻灯片
+你写 .tex 文件  ──→  编译器  ──→  输出 .pdf 幻灯片
+                      ├── Windows: xelatex
+                      └── Linux:   tectonic
                         ↑
                   依赖这些文件：
                    ├── seu_clean.sty  (样式规则)
@@ -112,7 +114,7 @@ SEU-Beamer-Slide-Narcissus/
 
 | 行号 | 做了什么 |
 |---|---|
-| 5-7 | 设置中文字体为微软雅黑 |
+| 5-7 | 自动检测中文字体：文源字体 (Linux) → 微软雅黑 (Windows) → Noto Sans CJK (备用) |
 | 14-23 | 引用 Beamer 内置的4个基础主题模块（搭积木式组合） |
 | 31-54 | 微调细节：列表用圆形符号、区块加圆角、图表标题用"图/表" |
 | 62-67 | **核心优化**：仅标题页显示 SEU 水印，正文页纯白背景 |
@@ -172,18 +174,19 @@ Windows 也可以双击 `pdf2ppt.bat`，拖拽 PDF 到窗口。
    \begin{document} ... \end{document}
 
 步骤2：在终端运行
-   xelatex myfile.tex      # Windows
-   tectonic myfile.tex      # Linux / macOS
+   tectonic myfile.tex       # Linux / macOS（Tectonic 自动编译两次）
+   xelatex myfile.tex        # Windows（需要手动编译两次）
    ─ 编译器读取 .tex
    ─ 遇到 \usepackage{seu_clean} → 读取 seu_clean.sty
    ─ 遇到 \includegraphics → 读取 png 图片
    ─ 遇到 xeCJK → 处理中文
    ─ 输出 myfile.pdf + 一堆临时文件（.aux, .log, .nav...）
 
-步骤3：再编译一次（关键！）
+步骤3：Windows 用户再编译一次（关键！）
    xelatex myfile.tex
    ─ 这次读取 .nav .toc 等辅助文件
    ─ 生成正确的目录和页码
+   ─ Linux/macOS 用户：Tectonic 已自动完成第二次编译，无需手动操作
 
 步骤4：得到最终的 myfile.pdf
 ```
@@ -191,6 +194,9 @@ Windows 也可以双击 `pdf2ppt.bat`，拖拽 PDF 到窗口。
 **为什么必须编译两次？**
 
 第一次编译生成辅助文件（`.toc` 目录信息、`.nav` 导航信息、`.snm` 帧信息），第二次编译读取这些文件，才能生成正确的目录、页码和导航结构。
+
+> **Windows（xelatex）**：需要手动编译两次，或使用 `make.bat`（自动执行两次）。
+> **Linux/macOS（Tectonic）**：已自动编译两次，无需手动操作。
 
 ---
 
@@ -351,7 +357,10 @@ A: 永远用 `width=` 或 `scale=` 控制大小，不要直接用原图尺寸。
 A: 你只编译了一次。LaTeX 需要**编译两次**才能生成正确的目录和交叉引用。
 
 **Q: 为什么字没显示出来？**
-A: 确认你的编辑器/命令行用的是 `xelatex`（而不是 `pdflatex`），因为中文支持需要 `xelatex`。
+A: 确认编译器正确：
+- **Windows**：用 `xelatex`（而不是 `pdflatex`），中文支持需要 xelatex。
+- **Linux/macOS**：用 `tectonic`（安装脚本已自动配置）。
+- 如果字体缺失，检查 `fc-list | grep WenYuan`（Linux）确认文源字体已安装。
 
 **Q: 我想换颜色？**
 A: 修改 `seu_clean.sty` 第71行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
