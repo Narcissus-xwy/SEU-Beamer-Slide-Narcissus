@@ -85,8 +85,8 @@
 \setbeamercolor{frametitle}{fg=black, bg=}
 \setbeamercolor{frametitle right}{fg=black, bg=}
 
-\setbeamerfont{section in head/foot}{size=\fontsize{7}{8}\selectfont}
-\setbeamerfont{subsection in head/foot}{size=\fontsize{7}{8}\selectfont}
+\setbeamerfont{section in head/foot}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{subsection in head/foot}{size=\fontsize{12}{14}\selectfont}
 
 
 \pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
@@ -106,6 +106,21 @@
   \setbeamercolor{block title example}{fg=white, bg=structure.fg!65!white}
   \setbeamercolor{block body example}{fg=black, bg=structure.fg!3!white}
 }
+
+%%%
+%%% Font sizes: absolute sizes (not relative to document class)
+%%%
+\setbeamerfont{frametitle}{size=\fontsize{16}{20}\selectfont}
+\setbeamerfont{title}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{subtitle}{size=\fontsize{14}{17}\selectfont}
+\setbeamerfont{author}{size=\fontsize{10}{13}\selectfont}
+\setbeamerfont{institute}{size=\fontsize{8}{10}\selectfont}
+\setbeamerfont{date}{size=\fontsize{7}{9}\selectfont}
+\setbeamerfont{section in toc}{size=\fontsize{12}{15}\selectfont}
+\setbeamerfont{subsection in toc}{size=\fontsize{10}{13}\selectfont}
+
+% Required for tikzpicture in frametitle template
+\RequirePackage{tikz}
 
 % Top & bottom colors: unified SEU green
 \setbeamercolor{author in head/foot}{fg=structure.fg, bg=structure.fg!15!white}
@@ -158,8 +173,8 @@
       \end{beamercolorbox}%
       \endgroup
     \else
-    \begin{beamercolorbox}[wd=.8\paperwidth,ht=\@tempdimb]{section in head/foot}%
-      \vbox to\@tempdimb{\vfil\insertsectionnavigationhorizontal{.5\textwidth}{\hskip0pt plus1filll}{}\vfil}%
+    \begin{beamercolorbox}[wd=.8\paperwidth,ht=\@tempdimb,leftskip=0.3cm]{section in head/foot}%
+      \vbox to\@tempdimb{\vfil\usebeamerfont{section in head/foot}\insertsection\vfil}%
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.135\paperwidth,ht=\@tempdimb,center]{subsection in head/foot}%
       \vbox to\@tempdimb{\vfil\pgfuseimage{title_logo}\vfil}%
@@ -171,44 +186,37 @@
   \fi%
 }
 
+% Toggle: \plainframetitle before a frame suppresses the box, uses default top-left position
+\newif\ifseu@plainframetitle
+\seu@plainframetitlefalse
+\newcommand{\plainframetitle}{\seu@plainframetitletrue}
+
 \defbeamertemplate*{frametitle}{seu theme}{%
-  \nointerlineskip%
-  %\vskip-2pt%
-  \hbox{\leavevmode
-    \advance\beamer@leftmargin by -12bp%
-    \advance\beamer@rightmargin by -12bp%
-    \beamer@tempdim=\textwidth%
-    \advance\beamer@tempdim by \beamer@leftmargin%
-    \advance\beamer@tempdim by \beamer@rightmargin%
-    \hskip-\Gm@lmargin\hbox{%
-      \setbox\beamer@tempbox=\hbox{\begin{minipage}[b]{\paperwidth}%
-          \vbox{}\vskip-.75ex%
-          \leftskip0.3cm%
-          \rightskip0.3cm plus1fil\leavevmode
-          \insertframetitle%
-          \ifx\insertframesubtitle\@empty%
-            \strut\par%
-          \else
-            \par{\usebeamerfont*{framesubtitle}{\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}\strut\par}%
-          \fi%
-          \nointerlineskip
-          \vbox{}%
-          \end{minipage}}%
-      \beamer@tempdim=\ht\beamer@tempbox%
-      \advance\beamer@tempdim by 2pt%
-      \begin{pgfpicture}{0.0mm}{0pt}{1.01\paperwidth}{\beamer@tempdim}
-        \usebeamercolor{frametitle right}
-        \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{\paperwidth}{\beamer@tempdim}}
-        \pgfusepath{clip}
-        \pgftext[left,base]{\pgfuseshading{beamer@frametitleshade}}
-      \end{pgfpicture}
-      \hskip-\paperwidth%
-      \box\beamer@tempbox%
-    }%
-    \hskip-\Gm@rmargin%
-  }%
-%  \nointerlineskip
-%    \vskip-0.2pt
-%    \hbox to\textwidth{\hskip-\Gm@lmargin\pgfuseshading{beamer@topshade}\hskip-\Gm@rmargin}
-%    \vskip-2pt
+  \ifx\insertframetitle\@empty
+    % 标题页：不显示帧标题
+  \else
+    \ifseu@plainframetitle
+      % 免框模式：左上角默认位置
+      \vskip0.25cm%
+      \noindent
+      \usebeamerfont{frametitle}\color{structure.fg!75!black}\insertframetitle\par%
+      \seu@plainframetitlefalse
+    \else
+      % 帧标题尖角框
+      \vskip0.25cm%
+      \noindent
+      \makebox[\textwidth][c]{%
+        \setlength{\fboxrule}{0.5pt}%
+        \setlength{\fboxsep}{3pt}%
+        {\color{structure.fg!70!black}%
+         \fcolorbox{structure.fg!70!black}{structure.fg!6!white}{%
+           \parbox{0.88\textwidth}{\centering
+             \usebeamerfont{frametitle}\color{structure.fg!75!black}\insertframetitle
+           }%
+         }%
+        }%
+      }%
+      \vskip0.25cm%
+    \fi
+  \fi
 }
