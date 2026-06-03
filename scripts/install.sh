@@ -170,7 +170,7 @@ install_python() {
 }
 
 # ─── 执行 ────────────────────────────────────────────────────
-PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 install_tectonic
 install_fonts
@@ -182,6 +182,6 @@ echo "  安装完成！"
 echo ""
 echo "  使用方法："
 echo "    cd SEU-Beamer-Slide-Narcissus"
-echo "    bash make.sh              # 编译 example_clean"
-echo "    bash make.sh mytalk       # 编译自定义文件"
+echo "    bash scripts/make.sh              # 编译 example_clean"
+echo "    bash scripts/make.sh mytalk       # 编译自定义文件"
 echo "========================================"

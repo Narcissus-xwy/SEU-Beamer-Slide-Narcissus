@@ -10,7 +10,7 @@
 
 set -e
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 PYTHON=$(command -v python3 || command -v python)
 if [ -z "$PYTHON" ]; then
@@ -59,7 +59,8 @@ echo "正在转换：${PDFFILE}"
 echo "DPI：${DPI}"
 echo ""
 
-if "$PYTHON" pdf2ppt.py "$PDFFILE" --dpi "$DPI"; then
+SCRIPT_DIR="$(dirname "$0")"
+if "$PYTHON" "$SCRIPT_DIR/pdf2ppt.py" "$PDFFILE" --dpi "$DPI"; then
     echo ""
     echo "========================================"
     echo "  转换完成！"

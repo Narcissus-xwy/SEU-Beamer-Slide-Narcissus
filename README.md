@@ -37,16 +37,16 @@ git clone https://github.com/Narcissus-xwy/SEU-Beamer-Slide-Narcissus.git
 cd SEU-Beamer-Slide-Narcissus
 
 # 2. 安装依赖（根据你的平台）
-bash install.sh          # Linux / macOS
-# 或双击 install.bat    # Windows
+bash scripts/install.sh      # Linux / macOS
+# 或双击 scripts\install.bat  # Windows
 
 # 3. 选择版本，编译 PDF
 # v1（经典版）：
-bash make.sh example_v1
+bash scripts/make.sh example_v1
 # v2（框式版，默认）：
-bash make.sh example_v2
+bash scripts/make.sh example_v2
 # 或简写 example_clean 也是 v2：
-bash make.sh
+bash scripts/make.sh
 
 # 4. 打开 out/example_v2.pdf 查看效果
 ```
@@ -110,33 +110,29 @@ SEU-Beamer-Slide-Narcissus/
 ├── seu_clean_v2.sty        ★ v2 框式样式文件
 │
 ├── source/                   图片素材
-│   ├── seu_background.png    标题页的背景水印（半透明 SEU 标志）
-│   ├── seu_logo_black.png    校徽（黑色版，放在白底页眉上）
-│   └── seu_title_black.png  "东南大学"标题图（黑色版）
+│   ├── seu_background.png    标题页背景水印
+│   ├── seu_logo_black.png    校徽（黑色版）
+│   └── seu_title_black.png  "东南大学"标题图
 │
 ├── fonts/                    西文字体（Helvetica 7个变体）
-│                             确保不同系统上编译结果一致
+├── figures/                  你放图片的文件夹
 │
-├── figures/                  你放图片的文件夹（自己往里放图）
+├── examples/                 示例文档
+│   ├── example_clean.tex     v2 示例（默认名，与 example_v2.tex 相同）
+│   ├── example_v1.tex        v1 示例
+│   └── example_v2.tex        v2 示例
 │
-├── example_clean.tex         v2 示例文档（与 example_v2.tex 相同，默认名）
-├── example_v1.tex            v1 示例文档
-├── example_v2.tex            v2 示例文档
-│
-├── install.sh                Linux/macOS 一键安装脚本
-├── install.bat               Windows 一键安装脚本
-├── make.sh                   Linux/macOS 编译脚本
-├── make.bat                  Windows 编译脚本（双击运行）
-├── Makefile                  通用 make 编译
-├── pdf2ppt.py                PDF → PPTX 转换工具
-├── pdf2ppt.sh                Linux/macOS PDF → PPTX 转换（终端运行）
-├── pdf2ppt.bat               Windows PDF → PPTX 转换（双击运行）
-├── requirements.txt          Python 依赖（pymupdf, python-pptx）
+├── scripts/                  工具脚本
+│   ├── make.sh / make.bat    编译脚本（Linux / Windows）
+│   ├── Makefile              通用 make 编译
+│   ├── install.sh / install.bat  安装脚本
+│   ├── pdf2ppt.py / .sh / .bat   PDF → PPTX 转换
+│   └── requirements.txt      Python 依赖
 │
 ├── out/                      编译输出目录
-├── .gitignore                Git 忽略规则（不跟踪 .aux .log 等临时文件）
-├── LICENSE                   GPL-3.0 开源协议
-└── README.md                 本文件
+├── .gitignore
+├── LICENSE
+└── README.md
 ```
 
 ### 版本切换
@@ -159,7 +155,7 @@ SEU-Beamer-Slide-Narcissus/
 
 ### Windows
 
-双击 `make.bat`，输入文件名后回车（或直接把 `.tex` 文件拖拽到窗口）。
+双击 `scripts\make.bat`，输入文件名后回车（或直接把 `.tex` 文件拖拽到窗口）。
 
 ```
 ========================================
@@ -169,28 +165,29 @@ SEU-Beamer-Slide-Narcissus/
 请输入 .tex 文件路径：example_v2
 ```
 
-脚本自动执行两次 `xelatex`，输出在 `out/` 目录。
+脚本自动切换到项目根目录，执行两次 `xelatex`，输出在 `out/` 目录。
 
 ### Linux / macOS
 
 ```bash
-bash make.sh                    # 编译 example_clean（v2）
-bash make.sh example_v1         # 编译 v1 示例
-bash make.sh example_v2         # 编译 v2 示例
-bash make.sh mytalk             # 编译自定义文件
-bash make.sh /path/to/mytalk    # 编译外部 .tex（PDF 写回原目录）
+# 示例文件自动在 examples/ 下查找，无需写路径
+bash scripts/make.sh                    # 编译 example_clean（v2）
+bash scripts/make.sh example_v1         # 编译 v1 示例
+bash scripts/make.sh example_v2         # 编译 v2 示例
+bash scripts/make.sh mytalk             # 编译自定义文件
+bash scripts/make.sh /path/to/mytalk    # 编译外部 .tex（PDF 写回原目录）
 ```
 
 ### PDF → PPTX 转换（可选）
 
 ```bash
-pip install -r requirements.txt   # 只需一次
-python pdf2ppt.py mytalk.pdf      # 转换
+pip install -r scripts/requirements.txt   # 只需一次
+python scripts/pdf2ppt.py mytalk.pdf      # 转换
 ```
 
 快捷方式：
-- **Linux / macOS**：`bash pdf2ppt.sh`（交互式，也可直接传参 `bash pdf2ppt.sh mytalk.pdf`）
-- **Windows**：双击 `pdf2ppt.bat`，拖拽 PDF 到窗口
+- **Linux / macOS**：`bash scripts/pdf2ppt.sh`（交互式，也可直接传参 `bash scripts/pdf2ppt.sh mytalk.pdf`）
+- **Windows**：双击 `scripts\pdf2ppt.bat`，拖拽 PDF 到窗口
 
 ---
 
@@ -204,6 +201,8 @@ python pdf2ppt.py mytalk.pdf      # 转换
    \begin{document} ... \end{document}
 
 步骤2：在终端运行
+   bash scripts/make.sh myfile  # 推荐：脚本自动处理路径
+   # 或直接用编译器：
    tectonic myfile.tex       # Linux / macOS（Tectonic 自动编译两次）
    xelatex myfile.tex        # Windows（需要手动编译两次）
    ─ 编译器读取 .tex
@@ -235,7 +234,7 @@ python pdf2ppt.py mytalk.pdf      # 转换
 ### Linux / macOS
 
 ```bash
-bash install.sh
+bash scripts/install.sh
 ```
 
 自动完成：
@@ -245,9 +244,9 @@ bash install.sh
 
 ### Windows
 
-双击 `install.bat`，脚本会：
+双击 `scripts\install.bat`，脚本会：
 1. 检查 `xelatex` 是否已安装（如未安装，提示下载 TeX Live / MiKTeX）
-2. 安装 Python 依赖（`pip install -r requirements.txt`）
+2. 安装 Python 依赖（`pip install`）
 
 > 文源字体适用于 Linux，Windows 使用系统自带的 **Microsoft YaHei**，无需额外安装。
 
@@ -314,8 +313,8 @@ bash install.sh
 \end{document}
 
 % 3. 编译：
-%    bash make.sh mytalk         # Linux / macOS
-%    或双击 make.bat，输入 mytalk  # Windows
+%    bash scripts/make.sh mytalk         # Linux / macOS
+%    或双击 scripts\make.bat，输入 mytalk # Windows
 ```
 
 ### 常用元素速查
@@ -405,7 +404,7 @@ A: 确认编译器正确：
 A: 修改 `seu_clean_v2.sty`（或 `seu_clean_v1.sty`）第 83 行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
 
 **Q: 可以在 Overleaf 上用吗？**
-A: 可以。把整个文件夹上传到 Overleaf，编译器选 **XeLaTeX**，然后按正常方式写。注意在导言区用 `\usepackage{seu_clean_v2}` 或 `\usepackage{seu_clean_v1}`。
+A: 可以。把整个文件夹上传到 Overleaf，编译器选 **XeLaTeX**，然后按正常方式写。注意 `.sty` 文件必须在 `.tex` 文件的同级或 TEXINPUTS 路径下。
 
 **Q: 不需要 `figures/` 文件夹也可以放图吗？**
 A: 可以。图片可以和 `.tex` 文件放同一目录，或者写完整相对路径。但用 `figures/` 统一管理更整洁。
@@ -450,8 +449,8 @@ v1 使用 Beamer 默认相对字号，不单独设置绝对字号。所有文字
 | **脚注 — 页码** | `1 / 12` | ~7pt | ~8pt | 同上 |
 
 > **修改方法**：
-> - **v2**：在 `seu_clean_v2.sty` 中找到 `%%% Font sizes` 段落（约第 110–130 行），修改对应的 `\setbeamerfont{...}{size=\fontsize{X}{Y}\selectfont}`。
-> - **v1**：在 `seu_clean_v1.sty` 中直接修改 `\setbeamerfont` 或按需添加绝对字号。
+> - **v2**：编辑 `seu_clean_v2.sty`（位于项目根目录），找到 `%%% Font sizes` 段落（约第 110–130 行），修改对应的 `\setbeamerfont`。
+> - **v1**：编辑 `seu_clean_v1.sty`，直接修改 `\setbeamerfont` 或按需添加绝对字号。
 
 ---
 

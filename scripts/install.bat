@@ -2,6 +2,9 @@
 chcp 65001 >nul
 title SEU-Beamer-Slide-Narcissus 安装脚本
 
+REM 切换到项目根目录（脚本在 scripts/ 子目录）
+cd /d "%~dp0.."
+
 echo ========================================
 echo   SEU-Beamer-Slide-Narcissus 安装脚本
 echo   Windows
@@ -30,13 +33,14 @@ echo.
 
 REM ─── 2. 安装 Python 依赖 ─────────────────────────────────
 echo [2/2] 安装 Python 依赖 ...
-if exist requirements.txt (
-    pip install -r requirements.txt
+set REQUIREMENTS=%~dp0requirements.txt
+if exist "%REQUIREMENTS%" (
+    pip install -r "%REQUIREMENTS%"
     if %errorlevel% equ 0 (
         echo [✔] Python 依赖安装完成
     ) else (
         echo [!] pip install 失败，请手动执行：
-        echo     pip install -r requirements.txt
+        echo     pip install -r scripts\requirements.txt
     )
 ) else (
     echo [!] requirements.txt 不存在
@@ -47,10 +51,10 @@ echo ========================================
 echo   安装完成！
 echo.
 echo   使用方法：
-echo     双击 make.bat        编译 example_clean
-echo     拖拽 .tex 到 make.bat  编译自定义文件
+echo     双击 scripts\make.bat    编译 example_clean
+echo     拖拽 .tex 到 make.bat   编译自定义文件
 echo.
 echo   PDF → PPTX 转换：
-echo     双击 pdf2ppt.bat
+echo     双击 scripts\pdf2ppt.bat
 echo ========================================
 pause

@@ -11,8 +11,8 @@
 
 set -e
 
-# 切换到脚本所在目录（项目根目录），使 seu_clean.sty 能被找到
-cd "$(dirname "$0")"
+# 切换到项目根目录（脚本在 scripts/ 子目录），使 .sty 能被找到
+cd "$(dirname "$0")/.."
 
 # Add local bin to PATH (common install location for tectonic)
 export PATH="$HOME/.local/bin:$PATH"
@@ -24,8 +24,13 @@ INPUT_ARG="${INPUT_ARG%\"}"
 
 # 解析输入文件路径（realpath 前确认文件存在，避免报错）
 if [ ! -f "${INPUT_ARG}.tex" ]; then
-    echo "错误：找不到文件 ${INPUT_ARG}.tex"
-    exit 1
+    if [ -f "examples/${INPUT_ARG}.tex" ]; then
+        INPUT_ARG="examples/${INPUT_ARG}"
+    else
+        echo "错误：找不到文件 ${INPUT_ARG}.tex"
+        echo "      也在 examples/ 目录下查找过，未找到。"
+        exit 1
+    fi
 fi
 INPUT_FILE="$(realpath "${INPUT_ARG}.tex")"
 

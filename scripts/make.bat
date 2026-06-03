@@ -2,6 +2,9 @@
 title SEU-Beamer-Slide-Narcissus 编译工具
 chcp 65001 >nul
 
+REM 切换到项目根目录（脚本在 scripts/ 子目录）
+cd /d "%~dp0.."
+
 echo ========================================
 echo   SEU-Beamer-Slide-Narcissus 编译工具
 echo ========================================
@@ -17,6 +20,19 @@ if /i "%texfile:~-4%"==".tex" set texfile=%texfile:~0,-4%
 
 REM 去除可能带有的双引号（拖拽文件时会产生）
 set texfile=%texfile:"=%
+
+REM 如果在根目录找不到，自动在 examples/ 下查找
+if not exist "%texfile%.tex" (
+    if exist "examples\%texfile%.tex" (
+        set texfile=examples\%texfile%
+    ) else (
+        echo.
+        echo 错误：找不到文件 %texfile%.tex
+        echo       也在 examples/ 目录下查找过，未找到。
+        pause
+        exit /b 1
+    )
+)
 
 REM 确保 out 输出目录存在
 if not exist out mkdir out
