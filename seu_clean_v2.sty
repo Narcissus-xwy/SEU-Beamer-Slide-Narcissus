@@ -1,0 +1,222 @@
+
+%%%
+%%% CJK font configuration for Chinese support
+%%%
+\RequirePackage{xeCJK}
+
+% Auto-detect CJK fonts: WenYuan (Linux) > Microsoft YaHei (Windows) > Noto CJK (fallback)
+\IfFontExistsTF{WenYuan Sans SC}{
+  \setCJKsansfont{WenYuan Sans SC}[AutoFakeSlant]
+  \setCJKmainfont{WenYuan Serif SC}[AutoFakeSlant]
+}{
+  \IfFontExistsTF{Microsoft YaHei}{
+    \setCJKsansfont{Microsoft YaHei}
+    \setCJKmainfont{Microsoft YaHei}
+  }{
+    \setCJKsansfont{Noto Sans CJK SC}[AutoFakeSlant]
+    \setCJKmainfont{Noto Serif CJK SC}[AutoFakeSlant]
+  }
+}
+
+%%%
+%%% Inherit definitions from existing themes (DO NOT MODIFY THESE)
+%%%
+
+% Layout scheme for outer elements: split header and footer
+\useoutertheme{split}
+
+% Color scheme for outer elements: use background colors
+\usecolortheme{whale}
+
+% Layout scheme for inner elements: rounded elements
+\useinnertheme{rounded}
+
+% Color scheme for inner elements: use foreground colors
+\usecolortheme{orchid}
+
+
+%%%
+%%% Tweak definitions of inner theme to match personal preferences (MODIFY THESE)
+%%%
+
+% Itemize items: default (triangle), circle, square, ball
+\setbeamertemplate{itemize items}[circle]
+
+% Enumerate items: default, circle, square, ball
+\setbeamertemplate{enumerate items}[circle]
+
+% Outline: default, sections numbered, subsections numbered, circle, square, ball, ball unnumbered
+\setbeamertemplate{sections/subsections in toc}[default]
+
+% General blocks:
+\setbeamertemplate{blocks}[rounded]
+
+% Title page:
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+
+% Part page:
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true]
+
+\setbeamertemplate{caption}[numbered]
+\setbeamerfont{caption}{size=\scriptsize}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+
+% Navigation symbols:
+% \setbeamertemplate{navigation symbols}{}
+
+
+%%%
+%%% Tweak definitions of outer theme to match Radboud (website) style
+%%%
+
+% Background: only on title page
+\pgfdeclareimage[width=\paperwidth,height=\paperheight]{bg}{source/seu_background.png}
+\defbeamertemplate*{background}{seu theme}{%
+  \ifx\insertframetitle\@empty
+    \pgfuseimage{bg}%
+  \fi
+}
+
+% Colors
+% \usecolortheme[RGB={182,11,45}]{structure} %Red
+\usecolortheme[RGB={81,122,52}]{structure} %SEU
+
+\setbeamercolor{frametitle}{fg=black, bg=}
+\setbeamercolor{frametitle right}{fg=black, bg=}
+
+\setbeamerfont{section in head/foot}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{subsection in head/foot}{size=\fontsize{12}{14}\selectfont}
+
+
+\pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
+  color(0pt)=(frametitle.bg);
+  color(\paperwidth)=(frametitle right.bg)}
+
+\AtBeginDocument{
+  \pgfdeclareverticalshading{beamer@topshade}{\paperwidth}{%
+    color(0pt)=(bg);
+    color(4pt)=(bg)}
+    
+  %%% Block color customizations: lighter, softer palette
+  \setbeamercolor{block title}{fg=white, bg=structure.fg!65!white}
+  \setbeamercolor{block body}{fg=black, bg=structure.fg!3!white}
+  \setbeamercolor{block title alerted}{fg=white, bg=red!55!white}
+  \setbeamercolor{block body alerted}{fg=black, bg=red!3!white}
+  \setbeamercolor{block title example}{fg=white, bg=structure.fg!65!white}
+  \setbeamercolor{block body example}{fg=black, bg=structure.fg!3!white}
+}
+
+%%%
+%%% Font sizes: absolute sizes (not relative to document class)
+%%%
+\setbeamerfont{frametitle}{size=\fontsize{16}{20}\selectfont}
+\setbeamerfont{title}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{subtitle}{size=\fontsize{14}{17}\selectfont}
+\setbeamerfont{author}{size=\fontsize{10}{13}\selectfont}
+\setbeamerfont{institute}{size=\fontsize{8}{10}\selectfont}
+\setbeamerfont{date}{size=\fontsize{7}{9}\selectfont}
+\setbeamerfont{section in toc}{size=\fontsize{12}{15}\selectfont}
+\setbeamerfont{subsection in toc}{size=\fontsize{10}{13}\selectfont}
+
+% Required for tikzpicture in frametitle template
+\RequirePackage{tikz}
+
+% Top & bottom colors: unified SEU green
+\setbeamercolor{author in head/foot}{fg=structure.fg, bg=structure.fg!15!white}
+\setbeamercolor{title in head/foot}{fg=structure.fg, bg=structure.fg!15!white}
+\setbeamercolor{section in head/foot}{fg=structure.fg, bg=structure.fg!15!white}
+\setbeamercolor{subsection in head/foot}{fg=structure.fg, bg=structure.fg!15!white}
+
+% Footline: AUTHOR | TITLE | DATE FRAMENUMBER
+
+\defbeamertemplate*{footline}{seu theme}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortdate
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.435\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+   \begin{beamercolorbox}[wd=0.065\paperwidth,ht=2.25ex,dp=1ex,right]{title in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\defbeamertemplate*{headline}{seu theme}{%
+  \leavevmode%
+  \@tempdimb=6.4375ex%
+    %\multiply\@tempdimb by\beamer@sectionmax%
+    \pgfdeclareimage[height=.85\@tempdimb]{logo}{source/seu_logo_black.png}%
+    \pgfdeclareimage[height=.9\@tempdimb]{title_logo}{source/seu_title_black.png}%
+  \logo{\pgfuseimage{logo}}%
+  \ifdim\@tempdimb>0pt%
+    \advance\@tempdimb by 1.125ex%
+    \ifx\insertframetitle\@empty
+      % Title page: invisible spacer (transparent bg) to preserve layout
+      \begingroup
+      \setbeamercolor{section in head/foot}{bg=}%
+      \setbeamercolor{subsection in head/foot}{bg=}%
+      \begin{beamercolorbox}[wd=.8\paperwidth,ht=\@tempdimb]{section in head/foot}%
+        \vbox to\@tempdimb{}%
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.135\paperwidth,ht=\@tempdimb,center]{subsection in head/foot}%
+        \vbox to\@tempdimb{}%
+      \end{beamercolorbox}%
+      \begin{beamercolorbox}[wd=.065\paperwidth,ht=\@tempdimb,center]{subsection in head/foot}%
+        \vbox to\@tempdimb{}%
+      \end{beamercolorbox}%
+      \endgroup
+    \else
+    \begin{beamercolorbox}[wd=.8\paperwidth,ht=\@tempdimb,leftskip=0.3cm]{section in head/foot}%
+      \vbox to\@tempdimb{\vfil\usebeamerfont{section in head/foot}\insertsection\vfil}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.135\paperwidth,ht=\@tempdimb,center]{subsection in head/foot}%
+      \vbox to\@tempdimb{\vfil\pgfuseimage{title_logo}\vfil}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.065\paperwidth,ht=\@tempdimb,center]{subsection in head/foot}%
+      \vbox to\@tempdimb{\vfil\insertlogo\vfil\vfil}%
+    \end{beamercolorbox}%
+    \fi%
+  \fi%
+}
+
+% Toggle: \plainframetitle before a frame suppresses the box, uses default top-left position
+\newif\ifseu@plainframetitle
+\seu@plainframetitlefalse
+\newcommand{\plainframetitle}{\seu@plainframetitletrue}
+
+\defbeamertemplate*{frametitle}{seu theme}{%
+  \ifx\insertframetitle\@empty
+    % 标题页：不显示帧标题
+  \else
+    \ifseu@plainframetitle
+      % 免框模式：左上角默认位置
+      \vskip0.25cm%
+      \noindent
+      \usebeamerfont{frametitle}\color{structure.fg!75!black}\insertframetitle\par%
+      \seu@plainframetitlefalse
+    \else
+      % 帧标题尖角框
+      \vskip0.25cm%
+      \noindent
+      \makebox[\textwidth][c]{%
+        \setlength{\fboxrule}{0.5pt}%
+        \setlength{\fboxsep}{3pt}%
+        {\color{structure.fg!70!black}%
+         \fcolorbox{structure.fg!70!black}{structure.fg!6!white}{%
+           \parbox{0.88\textwidth}{\centering
+             \usebeamerfont{frametitle}\color{structure.fg!75!black}\insertframetitle
+           }%
+         }%
+        }%
+      }%
+      \vskip0.25cm%
+    \fi
+  \fi
+}

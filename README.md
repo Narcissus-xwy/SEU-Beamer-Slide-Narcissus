@@ -8,7 +8,7 @@
 - **跨平台 CJK 中文支持**：Linux 自动检测文源字体 (WenYuan)，Windows 自动使用微软雅黑 (YaHei)
 - **黑色版 Logo** 适配白底风格
 - **统一浅绿色配色**，顶边底边色调一致
-- **16pt 帧标题**：居中圆角框，正文保持默认字号
+- 提供 **v1（经典）** 和 **v2（现代框式）** 两个版本，自由切换
 
 ---
 
@@ -16,14 +16,15 @@
 
 - [零、快速开始](#零快速开始)
 - [一、这个模板是什么？](#一这个模板是什么)
-- [二、文件结构详解](#二文件结构详解)
-- [三、编译方式](#三编译方式)
-- [四、编译原理：从代码到 PDF](#四编译原理从代码到-pdf)
-- [五、安装指南](#五安装指南)
-- [六、快速上手：从零写第一份幻灯片(#六快速上手从零写第一份幻灯片)
-- [七、插图指南](#七插图指南)
-- [八、FAQ 常见问题](#八faq-常见问题)
-- [九、字体字号速查表](#九字体字号速查表)
+- [二、版本对比](#二版本对比)
+- [三、文件结构详解](#三文件结构详解)
+- [四、编译方式](#四编译方式)
+- [五、编译原理：从代码到 PDF](#五编译原理从代码到-pdf)
+- [六、安装指南](#六安装指南)
+- [七、快速上手：从零写第一份幻灯片](#七快速上手从零写第一份幻灯片)
+- [八、插图指南](#八插图指南)
+- [九、FAQ 常见问题](#九faq-常见问题)
+- [十、字体字号速查表](#十字体字号速查表)
 - [许可证](#许可证)
 
 ---
@@ -39,11 +40,15 @@ cd SEU-Beamer-Slide-Narcissus
 bash install.sh          # Linux / macOS
 # 或双击 install.bat    # Windows
 
-# 3. 编译 PDF
-bash make.sh             # Linux / macOS
-# 或双击 make.bat        # Windows
+# 3. 选择版本，编译 PDF
+# v1（经典版）：
+bash make.sh example_v1
+# v2（框式版，默认）：
+bash make.sh example_v2
+# 或简写 example_clean 也是 v2：
+bash make.sh
 
-# 4. 打开 out/example_clean.pdf 查看效果
+# 4. 打开 out/example_v2.pdf 查看效果
 ```
 
 ---
@@ -66,21 +71,43 @@ bash make.sh             # Linux / macOS
                       └── Linux:   tectonic
                         ↑
                   依赖这些文件：
-                   ├── seu_clean.sty  (样式规则)
+                   ├── seu_clean_v1.sty 或 seu_clean_v2.sty  (样式规则)
                   ├── source/*.png   (校徽、背景图)
                   └── fonts/*.ttf    (字体文件)
 ```
 
 ---
 
-## 二、文件结构详解
+## 二、版本对比
+
+| 特性 | v1（经典版） | v2（框式版） |
+|---|---|---|
+| **样式文件** | `seu_clean_v1.sty` | `seu_clean_v2.sty` |
+| **示例文件** | `example_v1.tex` | `example_v2.tex` / `example_clean.tex` |
+| **帧标题样式** | 顶部渐变底色条，标题左对齐 | 居中通栏尖角 `\fcolorbox` 框 |
+| **页眉导航** | `\insertsectionnavigationhorizontal`（显示所有节） | 仅当前章节名左对齐 |
+| **页眉字号** | 7pt | 12pt |
+| **正文基底** | 相对（`\documentclass` 选项控制） | 相对（`\documentclass` 选项控制） |
+| **标题页字号** | 相对大小 | 绝对大小（不受基字影响） |
+| **目录字号** | 相对大小 | 绝对 12pt / 10pt |
+| **`\plainframetitle`** | 无 | 有（目录页免框） |
+| **`\RequirePackage{tikz}`** | 无 | 有（供 frametitle 模板使用） |
+
+### 如何选择
+
+- **v1**：简洁、经典，帧标题与页眉融为一体，适合内容密集的学术报告
+- **v2**：帧标题独立框式突出，章节名在页眉左侧固定显示，适合需要清晰区分章节结构的演示
+
+---
+
+## 三、文件结构详解
 
 ```
 SEU-Beamer-Slide-Narcissus/
 │
-├── seu_clean.sty           ★ 核心样式文件（最重要）
-│                             定义整套幻灯片的视觉风格：
-│                             绿色主题、白底、校徽、页眉页脚布局
+├── seu_clean.sty           ★ v2 默认样式文件（与 seu_clean_v2.sty 相同）
+├── seu_clean_v1.sty        ★ v1 经典样式文件
+├── seu_clean_v2.sty        ★ v2 框式样式文件
 │
 ├── source/                   图片素材
 │   ├── seu_background.png    标题页的背景水印（半透明 SEU 标志）
@@ -90,11 +117,11 @@ SEU-Beamer-Slide-Narcissus/
 ├── fonts/                    西文字体（Helvetica 7个变体）
 │                             确保不同系统上编译结果一致
 │
-├── figures/                  你放图片的文件夹（目前为空，自己往里放图）
+├── figures/                  你放图片的文件夹（自己往里放图）
 │
-├── example_clean.tex         示例文档（抄作业模板）
-│                             展示所有常用元素怎么写：标题页、目录、
-│                             列表、分栏、表格、公式、区块……
+├── example_clean.tex         v2 示例文档（与 example_v2.tex 相同，默认名）
+├── example_v1.tex            v1 示例文档
+├── example_v2.tex            v2 示例文档
 │
 ├── install.sh                Linux/macOS 一键安装脚本
 ├── install.bat               Windows 一键安装脚本
@@ -112,25 +139,21 @@ SEU-Beamer-Slide-Narcissus/
 └── README.md                 本文件
 ```
 
-### `seu_clean.sty` 逐段拆解
+### 版本切换
 
-| 行号 | 做了什么 |
-|---|---|
-| 5-19 | 自动检测中文字体：文源字体 (Linux) → 微软雅黑 (Windows) → Noto Sans CJK (备用) |
-| 25-35 | 引用 Beamer 内置的4个基础主题模块（搭积木式组合） |
-| 42-63 | 微调细节：列表用圆形符号、区块加圆角、图表标题用"图/表" |
-| 74-79 | **核心优化**：仅标题页显示 SEU 水印，正文页纯白背景 |
-| 83 | SEU 绿主题色 `RGB(81,122,52)` |
-| 88-89 | 页眉 section 导航字号 12pt |
-| 110-130 | **字体字号段落**：所有绝对字号定义（帧标题16pt、标题页、页眉、目录等） |
-| 123-128 | 页眉+页脚统一浅绿底色 |
-| 127-143 | **脚注**：`[作者] [日期] [标题] [页码/总页数]` |
-| 145-181 | **页眉**：标题页透明占位，正文页显示当前章节名（最左）+ 标题图 + 校徽 |
-| 183-215 | **帧标题**：通栏尖角框，框内仅显示帧标题（16pt）；`\plainframetitle` 免框模式 |
+使用哪个版本，就在 `.tex` 文件导言区引用对应的 `.sty` 文件：
+
+```latex
+\usepackage{seu_clean_v1}   % v1 经典版
+% 或
+\usepackage{seu_clean_v2}   % v2 框式版（默认）
+% 或
+\usepackage{seu_clean}      % 同上，v2 默认
+```
 
 ---
 
-## 三、编译方式
+## 四、编译方式
 
 写好 `.tex` 文件后，根据你的平台选择编译方式。
 
@@ -143,7 +166,7 @@ SEU-Beamer-Slide-Narcissus/
   SEU-Beamer-Slide-Narcissus 编译工具
 ========================================
 
-请输入 .tex 文件路径：mytalk
+请输入 .tex 文件路径：example_v2
 ```
 
 脚本自动执行两次 `xelatex`，输出在 `out/` 目录。
@@ -151,8 +174,10 @@ SEU-Beamer-Slide-Narcissus/
 ### Linux / macOS
 
 ```bash
-bash make.sh                    # 编译 example_clean
-bash make.sh mytalk             # 编译 mytalk.tex
+bash make.sh                    # 编译 example_clean（v2）
+bash make.sh example_v1         # 编译 v1 示例
+bash make.sh example_v2         # 编译 v2 示例
+bash make.sh mytalk             # 编译自定义文件
 bash make.sh /path/to/mytalk    # 编译外部 .tex（PDF 写回原目录）
 ```
 
@@ -169,12 +194,12 @@ python pdf2ppt.py mytalk.pdf      # 转换
 
 ---
 
-## 四、编译原理：从代码到 PDF
+## 五、编译原理：从代码到 PDF
 
 ```
 步骤1：你写 .tex 文件
    \documentclass{beamer}
-   \usepackage{seu_clean}
+   \usepackage{seu_clean_v2}   ← 换成 v1 或 v2
    \title{...}
    \begin{document} ... \end{document}
 
@@ -182,7 +207,7 @@ python pdf2ppt.py mytalk.pdf      # 转换
    tectonic myfile.tex       # Linux / macOS（Tectonic 自动编译两次）
    xelatex myfile.tex        # Windows（需要手动编译两次）
    ─ 编译器读取 .tex
-   ─ 遇到 \usepackage{seu_clean} → 读取 seu_clean.sty
+   ─ 遇到 \usepackage{seu_clean_v2} → 读取 seu_clean_v2.sty
    ─ 遇到 \includegraphics → 读取 png 图片
    ─ 遇到 xeCJK → 处理中文
    ─ 输出 myfile.pdf + 一堆临时文件（.aux, .log, .nav...）
@@ -205,7 +230,7 @@ python pdf2ppt.py mytalk.pdf      # 转换
 
 ---
 
-## 五、安装指南
+## 六、安装指南
 
 ### Linux / macOS
 
@@ -228,7 +253,7 @@ bash install.sh
 
 ---
 
-## 六、快速上手：从零写第一份幻灯片
+## 七、快速上手：从零写第一份幻灯片
 
 ```latex
 % 1. 新建一个 .tex 文件（比如 mytalk.tex）
@@ -237,7 +262,8 @@ bash install.sh
 % !TeX program = xelatex
 \documentclass[aspectratio=169, 11pt]{beamer}
 \usepackage[UTF8]{ctex}                          % 中文支持
-\usepackage{seu_clean}                           % SEU 样式
+\usepackage{seu_clean_v2}                        % SEU 样式（v2 框式版）
+% \usepackage{seu_clean_v1}                      % 改为 v1 经典版
 \usepackage{graphicx}                            % 插图
 \usepackage{booktabs}                            % 漂亮表格
 
@@ -254,7 +280,8 @@ bash install.sh
   \titlepage
 \end{frame}
 
-% 目录
+% 目录 (v2 推荐使用 \plainframetitle 让目录页免框)
+\plainframetitle         % ← 仅 v2 需要，v1 无此命令
 \begin{frame}{目录}
   \tableofcontents
 \end{frame}
@@ -286,9 +313,9 @@ bash install.sh
 
 \end{document}
 
-% 3. 编译（二选一）：
-%    双击 make.bat，输入 mytalk（或拖拽文件）→ 自动编译两次
-%    或手动：xelatex mytalk.tex 再执行一次
+% 3. 编译：
+%    bash make.sh mytalk         # Linux / macOS
+%    或双击 make.bat，输入 mytalk  # Windows
 ```
 
 ### 常用元素速查
@@ -334,23 +361,30 @@ bash install.sh
 
 ---
 
-## 七、插图指南
+## 八、插图指南
 
-### 7.1 把图片放进 `figures/` 文件夹
+### 8.1 把图片放进 `figures/` 文件夹
 
-### 7.2 在 .tex 里插入图片
+### 8.2 在 .tex 里插入图片
 
-### 7.3 控制图片大小的参数
+### 8.3 控制图片大小的参数
 
-### 7.4 双栏图文混排
+### 8.4 双栏图文混排
 
-### 7.5 多张图并排
+### 8.5 多张图并排
 
-### 7.6 图片格式建议
+### 8.6 图片格式建议
 
 ---
 
-## 八、FAQ 常见问题
+## 九、FAQ 常见问题
+
+**Q: v1 和 v2 怎么切换？**
+A: 修改 `.tex` 导言区的 `\usepackage`：
+```latex
+\usepackage{seu_clean_v1}   % 经典版
+\usepackage{seu_clean_v2}   % 框式版
+```
 
 **Q: 编译报错 "File not found"？**
 A: 检查图片路径。如果用 `\graphicspath{{figures/}}`，直接写文件名 `{my_diagram.png}`；如果没设路径，要写相对路径 `{figures/my_diagram.png}`。
@@ -368,19 +402,19 @@ A: 确认编译器正确：
 - 如果字体缺失，检查 `fc-list | grep WenYuan`（Linux）确认文源字体已安装。
 
 **Q: 我想换颜色？**
-A: 修改 `seu_clean.sty` 第71行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
+A: 修改 `seu_clean_v2.sty`（或 `seu_clean_v1.sty`）第 83 行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
 
 **Q: 可以在 Overleaf 上用吗？**
-A: 可以。把整个文件夹上传到 Overleaf，编译器选 **XeLaTeX**，然后按正常方式写。
+A: 可以。把整个文件夹上传到 Overleaf，编译器选 **XeLaTeX**，然后按正常方式写。注意在导言区用 `\usepackage{seu_clean_v2}` 或 `\usepackage{seu_clean_v1}`。
 
 **Q: 不需要 `figures/` 文件夹也可以放图吗？**
 A: 可以。图片可以和 `.tex` 文件放同一目录，或者写完整相对路径。但用 `figures/` 统一管理更整洁。
 
 ---
 
-## 九、字体字号速查表
+## 十、字体字号速查表
 
-### 预设绝对字号（不受 `\documentclass[9pt]` / `[11pt]` 影响）
+### v2（框式版）预设绝对字号
 
 | 显示位置 | 内容 | 字号 / 行距 | 控制命令 |
 |---|---|---|---|
@@ -394,7 +428,18 @@ A: 可以。图片可以和 `.tex` 文件放同一目录，或者写完整相对
 | **目录 — 节条目** | `研究背景`、`项目定位` … | 12pt / 15pt | `\setbeamerfont{section in toc}` |
 | **目录 — 子节条目** | 二级目录项 | 10pt / 13pt | `\setbeamerfont{subsection in toc}` |
 
-### 随文档类字号变化（相对大小）
+### v1（经典版）字号
+
+v1 使用 Beamer 默认相对字号，不单独设置绝对字号。所有文字大小由文档类 `\documentclass[11pt]` 决定：
+
+| 显示位置 | 内容 | 11pt 基字下 |
+|---|---|---|
+| **帧标题** | 顶部渐变条左对齐 | ~11pt bold |
+| **页眉章节导航** | 所有节名横排 | 7pt |
+| **标题页 — 标题** | `\title{}` 内容 | ~20pt (`\huge`) |
+| **正文** | block 内文字、itemize | ~11pt |
+
+### 随文档类字号变化（v1 和 v2 共用）
 
 | 显示位置 | 内容 | 9pt 基字下 | 11pt 基字下 | 控制命令 |
 |---|---|---|---|---|
@@ -404,7 +449,9 @@ A: 可以。图片可以和 `.tex` 文件放同一目录，或者写完整相对
 | **脚注 — 作者/日期/标题** | 底部绿色栏文字 | ~7pt | ~8pt | 继承 `\setbeamerfont{footline}` |
 | **脚注 — 页码** | `1 / 12` | ~7pt | ~8pt | 同上 |
 
-> **修改方法**：在 `seu_clean.sty` 中找到对应的 `\setbeamerfont{...}{size=\fontsize{X}{Y}\selectfont}` 行，修改 `X`（字号）和 `Y`（行距）即可。绝对字号行位于 `seu_clean.sty` 的 `%%% Font sizes` 段落，约第 110–130 行。
+> **修改方法**：
+> - **v2**：在 `seu_clean_v2.sty` 中找到 `%%% Font sizes` 段落（约第 110–130 行），修改对应的 `\setbeamerfont{...}{size=\fontsize{X}{Y}\selectfont}`。
+> - **v1**：在 `seu_clean_v1.sty` 中直接修改 `\setbeamerfont` 或按需添加绝对字号。
 
 ---
 
