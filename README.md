@@ -101,6 +101,7 @@ SEU-Beamer-Slide-Narcissus/
 ├── make.bat                  Windows 编译脚本（双击运行）
 ├── Makefile                  通用 make 编译
 ├── pdf2ppt.py                PDF → PPTX 转换工具
+├── pdf2ppt.sh                Linux/macOS PDF → PPTX 转换（终端运行）
 ├── pdf2ppt.bat               Windows PDF → PPTX 转换（双击运行）
 ├── requirements.txt          Python 依赖（pymupdf, python-pptx）
 │
@@ -160,7 +161,9 @@ pip install -r requirements.txt   # 只需一次
 python pdf2ppt.py mytalk.pdf      # 转换
 ```
 
-Windows 也可以双击 `pdf2ppt.bat`，拖拽 PDF 到窗口。
+快捷方式：
+- **Linux / macOS**：`bash pdf2ppt.sh`（交互式，也可直接传参 `bash pdf2ppt.sh mytalk.pdf`）
+- **Windows**：双击 `pdf2ppt.bat`，拖拽 PDF 到窗口
 
 ---
 
