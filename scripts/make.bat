@@ -1,9 +1,11 @@
 @echo off
 title SEU-Beamer-Slide-Narcissus 编译工具
 chcp 65001 >nul
+setlocal enabledelayedexpansion
 
 REM 切换到项目根目录（脚本在 scripts/ 子目录）
 cd /d "%~dp0.."
+set "REPO_ROOT=%cd%"
 
 echo ========================================
 echo   SEU-Beamer-Slide-Narcissus 编译工具
@@ -21,8 +23,13 @@ if /i "%texfile:~-4%"==".tex" set texfile=%texfile:~0,-4%
 REM 去除可能带有的双引号（拖拽文件时会产生）
 set texfile=%texfile:"=%
 
-REM 如果在根目录找不到，自动在 examples/ 下查找
+REM 提取纯文件名（不含路径），用于后续显示
+for %%i in ("%texfile%") do set "fname=%%~nxi"
+
+REM 判断传入路径是否在仓库内部
+set "texfile_abs=%texfile%"
 if not exist "%texfile%.tex" (
+    REM 尝试在 examples/ 下查找
     if exist "examples\%texfile%.tex" (
         set texfile=examples\%texfile%
     ) else (
@@ -32,14 +39,28 @@ if not exist "%texfile%.tex" (
         pause
         exit /b 1
     )
+) else (
+    REM 文件存在，检查是否在仓库外部（路径不含仓库根目录前缀）
+    echo "%texfile%" | findstr /i /c:"%REPO_ROOT%" >nul
+    if errorlevel 1 (
+        echo.
+        echo [信息] 检测到外部 .tex 文件，已复制到仓库根目录
+        copy /y "%texfile%.tex" "%fname%.tex" >nul
+        set "copied_src=%texfile%"
+        set texfile=%fname%
+    )
 )
 
 REM 确保 out 输出目录存在
 if not exist out mkdir out
 
 echo.
-echo 正在编译：%texfile%.tex
-echo 输出目录：out\
+if defined copied_src (
+    echo 源文件：%copied_src%.tex
+) else (
+    echo 正在编译：%texfile%.tex
+)
+echo 输出目录：%REPO_ROOT%\out\
 echo.
 
 xelatex -output-directory=out "%texfile%" -interaction=nonstopmode
@@ -50,7 +71,7 @@ if %errorlevel% neq 0 (
 xelatex -output-directory=out "%texfile%" -interaction=nonstopmode
 if %errorlevel% neq 0 (
     echo.
-    echo [警告] 第二次编译有警告或错误，请检查 out\%texfile%.log
+    echo [警告] 第二次编译有警告或错误，请检查 %REPO_ROOT%\out\%fname%.log
 )
 
 echo.
@@ -72,10 +93,16 @@ del out\*.thm /s /q >nul 2>&1
 del out\*.toc /s /q >nul 2>&1
 del out\*.log /s /q >nul 2>&1
 
+REM 如果是外部文件复制的，清理临时 .tex 文件
+if defined copied_src (
+    del "%fname%.tex" >nul 2>&1
+    echo [信息] 临时 .tex 文件已清理
+)
+
 echo.
 echo ========================================
 echo   编译完成！
-echo   PDF 文件：out\%texfile%.pdf
+echo   PDF 文件：%REPO_ROOT%\out\%fname%.pdf
 echo ========================================
 echo.
 pause

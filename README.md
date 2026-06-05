@@ -7,8 +7,8 @@
 - **正文页纯白背景**，仅标题页保留 SEU 水印，更适合学术报告投影
 - **跨平台 CJK 中文支持**：Linux 自动检测文源字体 (WenYuan)，Windows 自动使用微软雅黑 (YaHei)
 - **黑色版 Logo** 适配白底风格
-- **统一浅绿色配色**，顶边底边色调一致
-- 提供 **v1（经典）** 和 **v2（现代框式）** 两个版本，自由切换
+- **统一浅绿色/浅蓝色配色**（绿 `seu_clean_green`、蓝 `seu_clean_blue`），顶边底边色调一致
+- 提供 **v1（经典）** 和 **v2（现代框式）** 两个版本，v2 可选绿色或蓝色
 
 ---
 
@@ -43,12 +43,15 @@ bash scripts/install.sh      # Linux / macOS
 # 3. 选择版本，编译 PDF
 # v1（经典版）：
 bash scripts/make.sh example_v1
-# v2（框式版，默认）：
+# v2（框式版，绿色）：
 bash scripts/make.sh example_v2
-# 或简写 example_clean 也是 v2：
-bash scripts/make.sh
+# v2（框式版，蓝色，推荐投影）：
+bash scripts/make.sh example_clean
 
-# 4. 打开 out/example_v2.pdf 查看效果
+# 4. 查看生成的 PDF
+#    out/example_clean.pdf  （蓝色框式版）
+#    out/example_v2.pdf     （绿色框式版）
+#    out/example_v1.pdf     （v1 经典版）
 ```
 
 ---
@@ -59,7 +62,7 @@ bash scripts/make.sh
 
 1. 写一个 `.tex` 文件（纯文本，类似写代码）
 2. 用 `xelatex` 编译器运行它
-3. 得到一份带有东南大学校徽、绿色主题色、专业排版的 **PDF 幻灯片**
+3. 得到一份带有东南大学校徽、绿色/蓝色主题色、专业排版的 **PDF 幻灯片**
 
 **不需要 PowerPoint，不需要 Keynote，不需要手动调整排版。**
 
@@ -71,19 +74,23 @@ bash scripts/make.sh
                       └── Linux:   tectonic
                         ↑
                   依赖这些文件：
-                   ├── seu_clean_v1.sty 或 seu_clean_v2.sty  (样式规则)
-                  ├── source/*.png   (校徽、背景图)
-                  └── fonts/*.ttf    (字体文件)
+                   ├── seu_clean_v1.sty          (经典版样式)
+                   ├── seu_clean_green.sty        (绿色框式版样式)
+                   ├── seu_clean_blue.sty         (蓝色框式版样式)
+                   ├── source/*.png              (校徽、背景图)
+                   └── fonts/*.ttf               (字体文件)
 ```
 
 ---
 
 ## 二、版本对比
 
+### 结构对比（v1 经典 vs v2 框式）
+
 | 特性 | v1（经典版） | v2（框式版） |
 |---|---|---|
-| **样式文件** | `seu_clean_v1.sty` | `seu_clean_v2.sty` |
-| **示例文件** | `example_v1.tex` | `example_v2.tex` / `example_clean.tex` |
+| **样式文件** | `seu_clean_v1.sty` | `seu_clean_green.sty` / `seu_clean_blue.sty` |
+| **示例文件** | `example_v1.tex` | `example_v2.tex`（绿） / `example_clean.tex`（蓝） |
 | **帧标题样式** | 顶部渐变底色条，标题左对齐 | 居中通栏尖角 `\fcolorbox` 框 |
 | **页眉导航** | `\insertsectionnavigationhorizontal`（显示所有节） | 仅当前章节名左对齐 |
 | **页眉字号** | 7pt | 12pt |
@@ -93,10 +100,18 @@ bash scripts/make.sh
 | **`\plainframetitle`** | 无 | 有（目录页免框） |
 | **`\RequirePackage{tikz}`** | 无 | 有（供 frametitle 模板使用） |
 
+### 配色方案（v2 框式版）
+
+| 配色 | 样式文件 | RGB | 说明 |
+|---|---|---|---|
+| 绿色 | `seu_clean_green.sty` | `(81, 122, 52)` | 原 v2 默认配色 |
+| 蓝色 | `seu_clean_blue.sty` | `(52, 87, 122)` | 等深等饱和度替换，投影更清晰 |
+
 ### 如何选择
 
 - **v1**：简洁、经典，帧标题与页眉融为一体，适合内容密集的学术报告
-- **v2**：帧标题独立框式突出，章节名在页眉左侧固定显示，适合需要清晰区分章节结构的演示
+- **v2（绿色）**：帧标题独立框式突出，章节名在页眉左侧固定显示，适合需要清晰区分章节结构的演示
+- **v2（蓝色）**：同上框式结构，蓝色调在投影时视觉效果更佳
 
 ---
 
@@ -105,9 +120,9 @@ bash scripts/make.sh
 ```
 SEU-Beamer-Slide-Narcissus/
 │
-├── seu_clean.sty           ★ v2 默认样式文件（与 seu_clean_v2.sty 相同）
 ├── seu_clean_v1.sty        ★ v1 经典样式文件
-├── seu_clean_v2.sty        ★ v2 框式样式文件
+├── seu_clean_green.sty     ★ v2 框式样式文件（绿色）
+├── seu_clean_blue.sty      ★ v2 框式样式文件（蓝色）
 │
 ├── source/                   图片素材
 │   ├── seu_background.png    标题页背景水印
@@ -118,9 +133,9 @@ SEU-Beamer-Slide-Narcissus/
 ├── figures/                  你放图片的文件夹
 │
 ├── examples/                 示例文档
-│   ├── example_clean.tex     v2 示例（默认名，与 example_v2.tex 相同）
 │   ├── example_v1.tex        v1 示例
-│   └── example_v2.tex        v2 示例
+│   ├── example_v2.tex        v2 框式版（绿色）示例
+│   └── example_clean.tex     v2 框式版（蓝色）示例
 │
 ├── scripts/                  工具脚本
 │   ├── make.sh / make.bat    编译脚本（Linux / Windows）
@@ -140,11 +155,11 @@ SEU-Beamer-Slide-Narcissus/
 使用哪个版本，就在 `.tex` 文件导言区引用对应的 `.sty` 文件：
 
 ```latex
-\usepackage{seu_clean_v1}   % v1 经典版
+\usepackage{seu_clean_v1}        % v1 经典版（绿色）
 % 或
-\usepackage{seu_clean_v2}   % v2 框式版（默认）
+\usepackage{seu_clean_green}     % v2 框式版（绿色）
 % 或
-\usepackage{seu_clean}      % 同上，v2 默认
+\usepackage{seu_clean_blue}      % v2 框式版（蓝色，推荐投影）
 ```
 
 ---
@@ -162,7 +177,7 @@ SEU-Beamer-Slide-Narcissus/
   SEU-Beamer-Slide-Narcissus 编译工具
 ========================================
 
-请输入 .tex 文件路径：example_v2
+请输入 .tex 文件路径：example_clean
 ```
 
 脚本自动切换到项目根目录，执行两次 `xelatex`，输出在 `out/` 目录。
@@ -171,9 +186,9 @@ SEU-Beamer-Slide-Narcissus/
 
 ```bash
 # 示例文件自动在 examples/ 下查找，无需写路径
-bash scripts/make.sh                    # 编译 example_clean（v2）
+bash scripts/make.sh                    # 编译 example_clean（蓝色框式版）
 bash scripts/make.sh example_v1         # 编译 v1 示例
-bash scripts/make.sh example_v2         # 编译 v2 示例
+bash scripts/make.sh example_v2         # 编译 v2（绿色）示例
 bash scripts/make.sh mytalk             # 编译自定义文件
 bash scripts/make.sh /path/to/mytalk    # 编译外部 .tex（PDF 写回原目录）
 ```
@@ -196,7 +211,7 @@ python scripts/pdf2ppt.py mytalk.pdf      # 转换
 ```
 步骤1：你写 .tex 文件
    \documentclass{beamer}
-   \usepackage{seu_clean_v2}   ← 换成 v1 或 v2
+   \usepackage{seu_clean_blue}   ← 换成 v1/绿色/蓝色
    \title{...}
    \begin{document} ... \end{document}
 
@@ -206,7 +221,7 @@ python scripts/pdf2ppt.py mytalk.pdf      # 转换
    tectonic myfile.tex       # Linux / macOS（Tectonic 自动编译两次）
    xelatex myfile.tex        # Windows（需要手动编译两次）
    ─ 编译器读取 .tex
-   ─ 遇到 \usepackage{seu_clean_v2} → 读取 seu_clean_v2.sty
+   ─ 遇到 \usepackage{seu_clean_blue} → 读取 seu_clean_blue.sty
    ─ 遇到 \includegraphics → 读取 png 图片
    ─ 遇到 xeCJK → 处理中文
    ─ 输出 myfile.pdf + 一堆临时文件（.aux, .log, .nav...）
@@ -261,7 +276,8 @@ bash scripts/install.sh
 % !TeX program = xelatex
 \documentclass[aspectratio=169, 11pt]{beamer}
 \usepackage[UTF8]{ctex}                          % 中文支持
-\usepackage{seu_clean_v2}                        % SEU 样式（v2 框式版）
+\usepackage{seu_clean_blue}                      % SEU 样式（v2 框式版，蓝色）
+% \usepackage{seu_clean_green}                   % 改为绿色框式版
 % \usepackage{seu_clean_v1}                      % 改为 v1 经典版
 \usepackage{graphicx}                            % 插图
 \usepackage{booktabs}                            % 漂亮表格
@@ -378,11 +394,12 @@ bash scripts/install.sh
 
 ## 九、FAQ 常见问题
 
-**Q: v1 和 v2 怎么切换？**
+**Q: v1 / 绿色 / 蓝色 怎么切换？**
 A: 修改 `.tex` 导言区的 `\usepackage`：
 ```latex
-\usepackage{seu_clean_v1}   % 经典版
-\usepackage{seu_clean_v2}   % 框式版
+\usepackage{seu_clean_v1}        % 经典版（绿色）
+\usepackage{seu_clean_green}     % 框式版（绿色）
+\usepackage{seu_clean_blue}      % 框式版（蓝色，推荐投影）
 ```
 
 **Q: 编译报错 "File not found"？**
@@ -401,7 +418,7 @@ A: 确认编译器正确：
 - 如果字体缺失，检查 `fc-list | grep WenYuan`（Linux）确认文源字体已安装。
 
 **Q: 我想换颜色？**
-A: 修改 `seu_clean_v2.sty`（或 `seu_clean_v1.sty`）第 83 行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
+A: 修改 `seu_clean_green.sty` 或 `seu_clean_blue.sty`（或 `seu_clean_v1.sty`）第 83 行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
 
 **Q: 可以在 Overleaf 上用吗？**
 A: 可以。把整个文件夹上传到 Overleaf，编译器选 **XeLaTeX**，然后按正常方式写。注意 `.sty` 文件必须在 `.tex` 文件的同级或 TEXINPUTS 路径下。
@@ -445,11 +462,11 @@ v1 使用 Beamer 默认相对字号，不单独设置绝对字号。所有文字
 | **正文** | block 内文字、itemize、enumerate | ~9pt | ~11pt | `\documentclass[9pt/11pt]` |
 | **block 标题** | `\begin{block}{标题}` | ~9pt bold | ~11pt bold | `\setbeamerfont{block title}` |
 | **图表标题** | `\caption{}` | ~7pt | ~8pt | `\setbeamerfont{caption}`（`\scriptsize`） |
-| **脚注 — 作者/日期/标题** | 底部绿色栏文字 | ~7pt | ~8pt | 继承 `\setbeamerfont{footline}` |
+| **脚注 — 作者/日期/标题** | 底部主题色栏文字 | ~7pt | ~8pt | 继承 `\setbeamerfont{footline}` |
 | **脚注 — 页码** | `1 / 12` | ~7pt | ~8pt | 同上 |
 
 > **修改方法**：
-> - **v2**：编辑 `seu_clean_v2.sty`（位于项目根目录），找到 `%%% Font sizes` 段落（约第 110–130 行），修改对应的 `\setbeamerfont`。
+> - **v2**：编辑 `seu_clean_green.sty` 或 `seu_clean_blue.sty`（位于项目根目录），找到 `%%% Font sizes` 段落（约第 110–130 行），修改对应的 `\setbeamerfont`。
 > - **v1**：编辑 `seu_clean_v1.sty`，直接修改 `\setbeamerfont` 或按需添加绝对字号。
 
 ---
