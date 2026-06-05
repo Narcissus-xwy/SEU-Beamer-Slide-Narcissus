@@ -264,6 +264,7 @@ bash scripts/install.sh
 2. 安装 Python 依赖（`pip install`）
 
 > 文源字体适用于 Linux，Windows 使用系统自带的 **Microsoft YaHei**，无需额外安装。
+> **注意**：文源与雅黑字面率不同，Linux 模板切到 Windows 后中文字号会偏大。建议在 `.tex` 中添加 `\setCJKsansfont{Microsoft YaHei}[Scale=0.9]` 和 `\setCJKmainfont{Microsoft YaHei}[Scale=0.9]` 保持视觉一致（见 FAQ）。
 
 ---
 
@@ -416,6 +417,16 @@ A: 确认编译器正确：
 - **Windows**：用 `xelatex`（而不是 `pdflatex`），中文支持需要 xelatex。
 - **Linux/macOS**：用 `tectonic`（安装脚本已自动配置）。
 - 如果字体缺失，检查 `fc-list | grep WenYuan`（Linux）确认文源字体已安装。
+
+**Q: 在 WSL（Linux）上编译的字号正常，搬到 Windows（xelatex）后中文字忽大忽小？**
+A: 这是字体差异导致的。WSL 使用 **文源字体**（WenYuan），Windows 使用 **微软雅黑**（Microsoft YaHei），两者的字面率（x-height）不同，雅黑的视觉字号比文源大。
+
+解决方法：在 `.tex` 导言区加两行，给微软雅黑一个 `Scale=0.9` 的缩放因子：
+```latex
+\setCJKsansfont{Microsoft YaHei}[Scale=0.9]   % 影响 \sffamily 文本
+\setCJKmainfont{Microsoft YaHei}[Scale=0.9]   % 影响正文中文
+```
+建议加在 `\usepackage{seu_clean_*}` 之后。数值可根据实际视觉效果微调（0.85–0.95 之间）。
 
 **Q: 我想换颜色？**
 A: 修改 `seu_clean_green.sty` 或 `seu_clean_blue.sty`（或 `seu_clean_v1.sty`）第 83 行的 RGB 值。也可以加一行 `\usecolortheme[RGB={你的颜色}]{structure}`。
