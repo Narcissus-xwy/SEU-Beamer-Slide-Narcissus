@@ -1,0 +1,164 @@
+% !TeX program = xelatex
+\documentclass[aspectratio=169, 11pt]{beamer}
+\usepackage[UTF8]{ctex}
+\usepackage{seu_v3}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\title[V3 无标题栏模板]{东南大学 Beamer V3 模板 \\ No-titlebar Block Style}
+\subtitle{统一 block 背景 + 隐藏导航图标}
+\author[演示作者]{演示作者 \\ Southeast University}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{新特性概览}
+\section{排版元素演示}
+\section{表格与公式}
+\section{总结}
+
+\plainframetitle
+\begin{frame}{目\quad 录}
+\tableofcontents
+\end{frame}
+
+\begin{frame}{V3 版本特性}
+
+\begin{block}{核心改进}
+  \begin{itemize}
+    \item \textbf{取消 Block 标题栏}：标题与正文共用同一浅蓝背景，标题仅以蓝色粗体区分
+    \item \textbf{隐藏导航符号}：页面更干净
+    \item \textbf{三种 Block 视觉一致}：block / alert / example 无配色差异
+    \item 继承 v2 全部特性（框式帧标题、\texttt{\textbackslash plainframetitle}、绝对字号…）
+  \end{itemize}
+\end{block}
+
+\begin{exampleblock}{使用方式}
+  \texttt{\textbackslash usepackage\{seu\textunderscore v3\}} 替代原有 \texttt{seu\textunderscore clean\textunderscore blue} 即可。
+\end{exampleblock}
+\end{frame}
+
+\section{排版元素演示}
+
+\begin{frame}{列表与枚举}
+\begin{columns}
+\column{0.48\textwidth}
+\begin{block}{itemize 列表}
+  \begin{itemize}
+    \item 第一级项目
+    \item 第一级项目
+    \begin{itemize}
+      \item 第二级子项目
+      \item 第二级子项目
+    \end{itemize}
+  \end{itemize}
+\end{block}
+
+\column{0.48\textwidth}
+\begin{block}{enumerate 列表}
+  \begin{enumerate}
+    \item 第一步操作
+    \item 第二步操作
+    \item 第三步操作
+  \end{enumerate}
+\end{block}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Block 环境演示}
+\begin{block}{普通 Block（无标题栏）}
+  整个 block 为均匀浅蓝背景，标题文字以粗体显示在第一行。
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{警告 Block（暖橙底）}
+  用于关键警告或注意事项。暖橙色与蓝主题更协调。
+\end{alertblock}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{示例 Block}
+  用于示例、案例或直觉解释。与普通 block 视觉一致。
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{双栏布局}
+\begin{columns}
+\column{0.45\textwidth}
+\centering
+\textbf{左栏内容}\\
+\vspace{0.3cm}
+\footnotesize
+左栏可以放置文字说明、列表或简要描述。\\
+在双栏布局中，左右栏的内容应均衡，避免一栏过密另一栏过空。
+
+\column{0.45\textwidth}
+\centering
+\textbf{右栏内容}\\
+\vspace{0.3cm}
+\footnotesize
+右栏可以放置补充说明、公式或图片。\\
+columns 环境是 Beamer 中实现并排布局的标准方式。
+\end{columns}
+\end{frame}
+
+\section{表格与公式}
+
+\begin{frame}{表格示例（booktabs）}
+\begin{table}
+\centering
+\caption{各方法性能对比}
+\begin{tabular}{lccc}
+\toprule
+\textbf{方法} & \textbf{准确率} & \textbf{召回率} & \textbf{F1} \\
+\midrule
+方法 A & 89.2\% & 87.6\% & 88.4 \\
+方法 B & 94.1\% & 92.3\% & 93.2 \\
+方法 C & \textbf{95.7\%} & \textbf{94.8\%} & \textbf{95.2} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.2cm}
+
+\footnotesize 表格使用 \texttt{booktabs} 宏包规范，禁止竖线，表头加粗。
+\end{frame}
+
+\begin{frame}{公式与数学}
+\begin{block}{核心公式}
+  \begin{equation}
+    \mathcal{L}(\theta) = -\sum_{i=1}^{n} \log P(y_i \mid x_i; \theta) + \lambda \|\theta\|_2^2
+  \end{equation}
+\end{block}
+
+\vspace{0.2cm}
+
+\begin{itemize}
+  \item 交叉熵损失 + L2 正则化
+  \item 支持 \texttt{amsmath} 全部数学环境
+\end{itemize}
+\end{frame}
+
+\section{总结}
+
+\begin{frame}{模板使用方式}
+\begin{enumerate}
+  \item 在 \texttt{SEU-Beamer-Slide-Narcissus/} 目录下编写 \texttt{.tex} 文件
+  \item 导言区使用 \texttt{\textbackslash usepackage\{seu\textunderscore v3\}}
+  \item 使用 \texttt{xelatex} 编译两次
+  \item 将生成的 PDF 复制到目标位置
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{注意}
+  编译前确保 \texttt{source/} 目录（含 SEU logo 图片）与 \texttt{.tex} 文件在同一目录下。
+\end{alertblock}
+\end{frame}
+
+\end{document}
